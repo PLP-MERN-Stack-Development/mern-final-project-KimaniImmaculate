@@ -1,4 +1,5 @@
-name: CI/CD Pipeline
+# .github/workflows/ci.yml
+name: Zawify CI — Queen Immaculate's Empire
 
 on:
   push:
@@ -7,39 +8,52 @@ on:
     branches: [ main ]
 
 jobs:
-  test-and-deploy:
+  test-backend:
     runs-on: ubuntu-latest
-
-    services:
-      mongodb:
-        image: mongo
-        ports: [27017:27017]
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Install Backend Dependencies
-        run: cd backend && npm ci
-
-      - name: Run Backend Tests
+          node-version: '20'
+          
+      - name: Install backend deps
+        run: npm install
+        
+      - name: Run backend tests
+        run: npm test
         env:
-          JWT_SECRET: testsecret
-        run: cd backend && npm test
+          JWT_SECRET: fallback_secret_zawify_2025
+          MONGO_URI: mongodb://127.0.0.1:27017/zawify-test
 
-      - name: Install Frontend Dependencies
-        run: cd frontend && npm ci
+  test-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
 
-      - name: Run Frontend Tests
-        run: cd frontend && npm run test -- --passWithNoTests
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install frontend deps
+        run: npm install
+        
+      - name: Run frontend tests
+        run: npm test -- --passWithNoTests
 
-      - name: Deploy to Render / Vercel / Railway
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "Deploying..."
-          # Add your deploy command here
-          # e.g., git push https://git.heroku.com/your-app.git main
+  notify:
+    needs: [test-backend, test-frontend]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - run: echo "QUEEN IMMACULATE HAS SPOKEN — ALL TESTS PASSED. ZAWIFY IS PERFECT."
