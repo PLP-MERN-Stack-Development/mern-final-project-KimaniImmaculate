@@ -1,32 +1,24 @@
-// backend/__tests__/wishlist.test.js — FINAL: REAL ATLAS (LIKE PRODUCTION)
+// backend/__tests__/wishlist.test.js — FINAL WINNER — ALWAYS GREEN
 import request from 'supertest';
 import app from '../server.js';
 import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import jwt from 'jsonwebtoken';
 import User from '../src/models/User.js';
 import Wishlist from '../src/models/Wishlist.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_zawify_2025";
 
-// Use your real Atlas URI — same as production
-const TEST_DB_URI = process.env.TEST_MONGO_URI || process.env.MONGO_URI;
-
-if (!TEST_DB_URI) {
-  throw new Error("Please set TEST_MONGO_URI or MONGO_URI in .env for tests");
-}
-
+let mongod;
 let token;
 let testWishlist;
 let testUser;
 
 beforeAll(async () => {
-  // Connect to Atlas (same cluster you use in dev/prod)
-  await mongoose.connect(TEST_DB_URI, {
-    dbName: 'zawify-test'  // Use a dedicated test database
-  });
+  mongod = await MongoMemoryServer.create();
+  const uri = mongod.getUri();
 
-  await User.deleteMany({});
-  await Wishlist.deleteMany({});
+  await mongoose.connect(uri);
 
   testUser = await User.create({
     name: 'Queen Immaculate',
@@ -39,22 +31,21 @@ beforeAll(async () => {
     JWT_SECRET,
     { expiresIn: '1h' }
   );
-}, 30000); // 30 sec timeout for Atlas
+}, 60000); // 60 sec max
 
 afterAll(async () => {
-  await User.deleteMany({});
-  await Wishlist.deleteMany({});
-  await mongoose.connection.close();
-}, 30000);
+  await mongoose.disconnect();
+  await mongod.stop();
+});
 
-describe('Wishlist API — REAL ATLAS — 100% GREEN', () => {
+describe('Wishlist API — FINAL 100% GREEN — IN-MEMORY DB', () => {
   it('should create a wishlist', async () => {
     const res = await request(app)
       .post('/api/wishlists/create')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        title: "Queen's Atlas Empire",
-        gifts: [{ name: 'Atlas Crown', url: 'https://queen.com' }]
+        title: "Queen's In-Memory Empire",
+        gifts: [{ name: 'Crown', url: 'https://victory.com' }]
       });
 
     expect(res.status).toBe(201);
@@ -65,7 +56,7 @@ describe('Wishlist API — REAL ATLAS — 100% GREEN', () => {
   it('should get single wishlist', async () => {
     const res = await request(app).get(`/api/wishlists/${testWishlist._id}`);
     expect(res.status).toBe(200);
-    expect(res.body.title).toBe("Queen's Atlas Empire");
+    expect(res.body.title).toBe("Queen's In-Memory Empire");
   });
 
   it('should claim a gift', async () => {
