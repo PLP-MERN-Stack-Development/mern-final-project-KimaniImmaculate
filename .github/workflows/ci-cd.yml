@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo
+        ports: [27017:27017]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Backend Dependencies
+        run: cd backend && npm ci
+
+      - name: Run Backend Tests
+        env:
+          JWT_SECRET: testsecret
+        run: cd backend && npm test
+
+      - name: Install Frontend Dependencies
+        run: cd frontend && npm ci
+
+      - name: Run Frontend Tests
+        run: cd frontend && npm run test -- --passWithNoTests
+
+      - name: Deploy to Render / Vercel / Railway
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Deploying..."
+          # Add your deploy command here
+          # e.g., git push https://git.heroku.com/your-app.git main
