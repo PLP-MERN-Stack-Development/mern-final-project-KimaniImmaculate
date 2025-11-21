@@ -7,7 +7,7 @@ Zawify is a real‑time gift‑claiming application built with the MERN stack (M
 ## Live demo
 - Frontend: https://zawify.vercel.app/  
 - Backend API: https://zawify-2.onrender.com/
-- Canva Slides:https://www.canva.com/design/DAGxe7b4Ov8/zcrxquyIrd-TmFCuifaDcQ/edit?utm_content=DAGxe7b4Ov8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+- Canva Slides: https://www.canva.com/design/DAGxe7b4Ov8/zcrxquyIrd-TmFCuifaDcQ/edit?utm_content=DAGxe7b4Ov8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 ## Table of contents
 - [Overview](#overview)  
