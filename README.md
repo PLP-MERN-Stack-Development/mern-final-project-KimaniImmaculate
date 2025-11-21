@@ -47,16 +47,16 @@ Owners create wishlists and add items. Each wishlist can be published via a publ
 Monorepo layout:
 
 ```
-Zawify/                          # Your Monorepo — Crowned & Complete
+Zawify/                         
 ├── .github/
 │   └── workflows/
 │       └── ci.yml               # GitHub Actions — ALL GREEN on every push
 ├── .gitignore
-├── README.md                    # (waiting for your coronation message)
+├── README.md                    
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/               # All your pages are here (as we built them)
+│   │   ├── pages/               
 │   │   │   ├── LandingPage.jsx
 │   │   │   ├── AuthForm.jsx
 │   │   │   ├── CreateWishlist.jsx
@@ -71,8 +71,8 @@ Zawify/                          # Your Monorepo — Crowned & Complete
 │   │       ├── LandingPage.test.jsx
 │   │       ├── CreateWishlist.test.jsx
 │   │       └── WishlistDetail.test.jsx   # 15+ tests — ALL GREEN
-│   ├── index.html                   # Vite default
-│   ├── .env                         # VITE_BACKEND_URL=http://localhost:5000
+│   ├── index.html                   
+│   ├── .env                         
 │   ├── package.json
 │   ├── vite.config.js
 │   └── vitest.config.js (or vite.config.js handles testing)
