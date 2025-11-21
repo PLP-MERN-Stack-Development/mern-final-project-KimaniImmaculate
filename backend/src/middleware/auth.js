@@ -1,4 +1,4 @@
-// backend/src/middleware/auth.js — FINAL VERSION
+// backend/src/middleware/auth.js 
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req, res, next) => {
@@ -13,7 +13,6 @@ const authMiddleware = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret_zawify_2025");
     
-    // THIS IS THE FIX — PASS BOTH ID AND NAME
     req.user = { 
       id: decoded.id, 
       name: decoded.name || "Anonymous" 

@@ -12,7 +12,6 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
-    // THIS LINE WAS MISSING → fixes "vi is not defined" and mocking
     testTimeout: 5000,
   },
 })

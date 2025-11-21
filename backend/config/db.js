@@ -1,4 +1,4 @@
-// backend/config.js
+// backend/config/db.js
 import mongoose from "mongoose";
 
 // Get the URI from the environment variables
